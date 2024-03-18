@@ -6,6 +6,8 @@ from tkinter import PhotoImage
 import random 
 import pygame
 
+pygame.mixer.init()
+
 
 class Aplicacion:
     def __init__(self):
@@ -13,28 +15,23 @@ class Aplicacion:
         self.window.title('Juego concéntrate')
         self.window.geometry("520x380")
         self.window.resizable(False, False)
-        pygame.init()
+        self.window.config(background='#1f1e30')
         #contar clicks
         self.count = 0
         #contar coincidencias
         self.counter_match = 0
         #Background botones 
-        self.standar_background = '#4a1070'
+        self.standar_background = '#575769'
         self.valor_boton = 0
         self.botones = []
         self.values_couple_buttons = []
-        # Establecer imagen de fondo
-        background_window = PhotoImage(file="images/background-window.png")
-        label_bacground = tk.Label(self.window, image=background_window)
-        label_bacground.place(x=0, y=0, relwidth=1, relheight=1)
-        label_bacground.image = background_window
         #Marco inferior
         self.botton_frame = ttk.Frame(self.window)
         self.botton_frame.grid(row=5, column=0, columnspan=4, pady=12)
         
         self.create_buttons()
             
-        self.hide_buttons = tk.Button(self.botton_frame, text='Ocultar botones', borderwidth=0)
+        self.hide_buttons = tk.Button(self.botton_frame, text='Ocultar botones', borderwidth=0, relief='flat')
         self.hide_buttons.config(command=self.ocultar_botones, 
                                  width=14, height=2, padx=3, pady=3, 
                                  background='#ff9703', foreground='white',
@@ -70,7 +67,12 @@ class Aplicacion:
     
             self.boton = tk.Button(self.window, text=self.valor_boton, height=3, width=12, borderwidth=0)
             self.boton.grid(column=self.colum_buttom, row=self.row_button, padx=3, pady=3)
-            self.boton.config(command=lambda btn=self.boton: self.validate_click_button(btn), state='disabled', foreground='white')
+            self.boton.config(command=lambda btn=self.boton: self.validate_click_button(btn), 
+                              state='disabled',
+                              background=self.standar_background, 
+                              foreground='white', 
+                              disabledforeground="white",
+                              )
             self.botones.append(self.boton)
      
     
@@ -83,10 +85,12 @@ class Aplicacion:
     
     def validate_click_button(self, button):
         self.count += 1
-        button.config(background='white', foreground='black', state='disabled')
+        button.config(background='white', foreground='black',disabledforeground='black', state='disabled')
         self.values_couple_buttons.append(button)
+        pygame.mixer.music.load("sounds/click-card.mp3")
+        pygame.mixer.music.play(loops=0)
         if self.count > 1:
-            self.window.after(1000, self.check_match_buttons, self.values_couple_buttons)
+            self.window.after(700, self.check_match_buttons, self.values_couple_buttons)
             self.count = 0
             self.values_couple_buttons = []
             
@@ -97,9 +101,11 @@ class Aplicacion:
         value_second_button = buttons[1].cget('text')
         
         if value_first_button == value_second_button:
-            buttons[0].config(background='white', foreground='black', state='disabled')
-            buttons[1].config(background='white', foreground='black', state='disabled')
+            buttons[0].config(background='#307a5f', disabledforeground='white', state='disabled')
+            buttons[1].config(background='#307a5f', disabledforeground='white', state='disabled')
             self.counter_match += 1
+            pygame.mixer.music.load("sounds/match.mp3")
+            pygame.mixer.music.play(loops=0)
         else:                                                                                                                                              
             buttons[0].config(background=self.standar_background, foreground=self.standar_background, state='normal')
             buttons[1].config(background=self.standar_background, foreground=self.standar_background, state='normal')
