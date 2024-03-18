@@ -2,7 +2,6 @@
 import tkinter as tk
 from tkinter import ttk
 from tkinter import messagebox
-from tkinter import PhotoImage
 import random 
 import pygame
 
@@ -11,11 +10,17 @@ pygame.mixer.init()
 
 class Aplicacion:
     def __init__(self):
+        # Ventana principal
         self.window = tk.Tk()
         self.window.title('Juego concéntrate')
-        self.window.geometry("520x380")
+        self.window.geometry("520x412")
         self.window.resizable(False, False)
         self.window.config(background='#1f1e30')
+        # errores a la hora de hacer match
+        self.num_errores = 0
+        self.label_errores = tk.Label(self.window, text=f'Errores : {self.num_errores}', font=("Helvetica", 19))
+        self.label_errores.grid(row=0,column=0, padx=5, pady=5)
+        self.label_errores.config(background='white')
         #contar clicks
         self.count = 0
         #contar coincidencias
@@ -53,16 +58,16 @@ class Aplicacion:
         for i in range(1, 17):
             self.valor_boton = valor_botones.pop(random.randrange(len(valor_botones))) 
             if i <= 4:
-                self.row_button = 0
+                self.row_button = 1
                 self.colum_buttom = i - 1
             elif i <= 8:
-                self.row_button = 1
+                self.row_button = 2
                 self.colum_buttom = i - 5
             elif i <= 12:
-                self.row_button = 2
+                self.row_button = 3
                 self.colum_buttom = i - 9
             else:
-                self.row_button = 3
+                self.row_button = 4
                 self.colum_buttom = i - 13
     
             self.boton = tk.Button(self.window, text=self.valor_boton, height=3, width=12, borderwidth=0)
@@ -109,8 +114,11 @@ class Aplicacion:
         else:                                                                                                                                              
             buttons[0].config(background=self.standar_background, foreground=self.standar_background, state='normal')
             buttons[1].config(background=self.standar_background, foreground=self.standar_background, state='normal')
+            self.num_errores += 1
+            self.update_label_errors() 
                     
         if self.counter_match == 8:
+            self.num_errores = 0
             nuew_game = messagebox.askyesno("Juego terminado", "¿Quieres jugar de nuevo?")
             if nuew_game:
                 self.create_buttons()
@@ -119,5 +127,10 @@ class Aplicacion:
             else:
                 messagebox.showinfo("Juego terminado", "Muchas gracias por jugar")
 
+    
+    def update_label_errors(self):
+        self.label_errores.config(text=f'Errores : {self.num_errores}') 
+    
+    
     
 aplicacion = Aplicacion()
