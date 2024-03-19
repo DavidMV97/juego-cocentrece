@@ -1,4 +1,3 @@
-
 import tkinter as tk
 from tkinter import ttk
 from tkinter import messagebox
@@ -36,14 +35,23 @@ class Aplicacion:
         
         self.create_buttons()
             
-        self.hide_buttons = tk.Button(self.botton_frame, text='Ocultar botones', borderwidth=0, relief='flat')
+        self.hide_buttons = ttk.Button(self.botton_frame, text='Ocultar botones')
         self.hide_buttons.config(command=self.ocultar_botones, 
-                                 width=12,height=2,
-                                 background='#ff9703', foreground='white',
-                                 activebackground='#ff9703',
-                                 activeforeground='white',
-                                 cursor="hand1")
+                                 width=20
+                                )
         self.hide_buttons.pack(side="bottom")
+        
+        #Definicion de estilos de botones
+        self.style = ttk.Style()
+        #Estilo inicial 
+        self.style.configure('NormalButton.TButton',
+                             background=[('active', 'white'), ('disabled', self.standar_background)],
+                             foreground=[('active', self.standar_background), ('disabled', self.standar_background)]
+                            )
+        
+        self.style.configure('HideButton.TButton', background=self.standar_background, foreground=self.standar_background, padding=10)
+        
+        
         self.window.mainloop()
     
     
@@ -70,27 +78,24 @@ class Aplicacion:
                 self.row_button = 4
                 self.colum_buttom = i - 13
     
-            self.boton = tk.Button(self.window, text=self.valor_boton, height=3, width=12, borderwidth=0, relief='flat')
+            self.boton = ttk.Button(self.window, text=self.valor_boton)
             self.boton.grid(column=self.colum_buttom, row=self.row_button, padx=3, pady=3)
             self.boton.config(command=lambda btn=self.boton: self.validate_click_button(btn), 
-                              state='disabled',
-                              background=self.standar_background, 
-                              foreground='white', 
-                              disabledforeground="white",
-                              )
+                              style='NormalButton.TButton')
+            self.boton.state(["disabled"])
             self.botones.append(self.boton)
      
     
        
     def ocultar_botones(self):
         for boton in self.botones:
-            boton.config(background=self.standar_background, foreground=self.standar_background, activebackground=self.standar_background, activeforeground=self.standar_background, state='normal')
+            boton.config(style='HideButton.TButton', state='normal')
         self.hide_buttons.config(state='disabled')
     
     
     def validate_click_button(self, button):
         self.count += 1
-        button.config(background='white', foreground='black',disabledforeground='black', state='disabled')
+        button.config(style='SelectedGameButton.TButton', state='disabled')
         self.values_couple_buttons.append(button)
         pygame.mixer.music.load("sounds/click-card.mp3")
         pygame.mixer.music.play(loops=0)
@@ -106,14 +111,14 @@ class Aplicacion:
         value_second_button = buttons[1].cget('text')
         
         if value_first_button == value_second_button:
-            buttons[0].config(background='#307a5f', disabledforeground='white', state='disabled')
-            buttons[1].config(background='#307a5f', disabledforeground='white', state='disabled')
+            buttons[0].config(style='MatchedGameButton.TButton', state='disabled')
+            buttons[1].config(style='MatchedGameButton.TButton', state='disabled')
             self.counter_match += 1
             pygame.mixer.music.load("sounds/match.mp3")
             pygame.mixer.music.play(loops=0)
         else:                                                                                                                                              
-            buttons[0].config(background=self.standar_background, foreground=self.standar_background, state='normal')
-            buttons[1].config(background=self.standar_background, foreground=self.standar_background, state='normal')
+            buttons[0].config(style='HideButton.TButton', state='normal')
+            buttons[1].config(style='HideButton.TButton', state='normal')
             self.num_errores += 1
             self.update_label_errors() 
                     
