@@ -13,19 +13,18 @@ class Aplicacion:
         # Ventana principal
         self.window = tk.Tk()
         self.window.title('Juego concéntrate')
-        self.window.geometry("520x400")
+        self.window.geometry("620x475")
         self.window.resizable(False, False)
         self.window.config(background='#1f1e30')
         # errores a la hora de hacer match
         self.num_errores = 0
-        self.label_errores = tk.Label(self.window, text=f'Errores : {self.num_errores}', font=("Helvetica", 16), width=9, padx=5)
-        self.label_errores.grid(row=0,column=0)
+        self.label_errores = tk.Label(self.window, text=f'Errores : {self.num_errores}', font=("Helvetica", 17), width=9, padx=5)
+        self.label_errores.grid(row=0,column=0, pady=5)
         self.label_errores.config(background='white')
         #contar clicks
         self.count = 0
         #contar coincidencias
         self.counter_match = 0
-        #Background botones 
         self.standar_background = '#575769'
         self.valor_boton = 0
         self.botones = []
@@ -38,10 +37,11 @@ class Aplicacion:
             
         self.hide_buttons = tk.Button(self.botton_frame, text='Ocultar botones', borderwidth=0, relief='flat')
         self.hide_buttons.config(command=self.ocultar_botones, 
-                                 width=12,height=2,
+                                 width=12,
                                  background='#ff9703', foreground='white',
                                  activebackground='#ff9703',
                                  activeforeground='white',
+                                 pady=5,
                                  cursor="hand1")
         self.hide_buttons.pack(side="bottom")
         self.window.mainloop()
@@ -70,8 +70,8 @@ class Aplicacion:
                 self.row_button = 4
                 self.colum_buttom = i - 13
     
-            self.boton = tk.Button(self.window, text=self.valor_boton, height=3, width=12, borderwidth=0, relief='flat')
-            self.boton.grid(column=self.colum_buttom, row=self.row_button, padx=3, pady=3)
+            self.boton = tk.Button(self.window, text=self.valor_boton, height=4, width=12, borderwidth=0, relief='flat',font=("Helvetica", 13))
+            self.boton.grid(column=self.colum_buttom, row=self.row_button, padx=4, pady=4)
             self.boton.config(command=lambda btn=self.boton: self.validate_click_button(btn), 
                               state='disabled',
                               background=self.standar_background, 
