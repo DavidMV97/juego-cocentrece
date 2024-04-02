@@ -35,7 +35,7 @@ class Aplicacion:
         self.botones = []
         
         self.values_couple_buttons = []
-        #Marco inferior
+        # Marco inferior
         self.botton_frame = ttk.Frame(self.window)
         self.botton_frame.grid(row=5, column=0, columnspan=4, pady=12)
         
@@ -43,6 +43,7 @@ class Aplicacion:
         self.time_label.grid(row=0, column=1)
                 
         self.create_buttons()
+        
         # Botón ocultar todos los botones  
         self.hide = tk.Button(self.botton_frame, text='Ocultar botones', borderwidth=0, relief='flat')
         self.hide.config(command=self.hide_buttons, 
@@ -83,8 +84,8 @@ class Aplicacion:
             self.boton.grid(column=self.colum_buttom, row=self.row_button, padx=4, pady=4)
             self.boton.config(command=lambda btn=self.boton: self.validate_click_button(btn), 
                               state='disabled',
-                              background=self.standar_background, 
-                              foreground='white', 
+                              bg=self.standar_background, 
+                              fg='red', 
                               disabledforeground="white",
                               )
             self.botones.append(self.boton)
@@ -93,7 +94,7 @@ class Aplicacion:
        
     def hide_buttons(self):
         for boton in self.botones:
-            boton.config(background=self.standar_background, foreground=self.standar_background, activebackground=self.standar_background, activeforeground=self.standar_background, state='normal')
+            boton.config(bg=self.standar_background, fg=self.standar_background, activebackground=self.standar_background, activeforeground=self.standar_background, state='normal')
         self.hide.config(state='disabled')
          # Inicio el temporizador
         self.start_timer()
@@ -101,7 +102,7 @@ class Aplicacion:
     
     def validate_click_button(self, button):
         self.count += 1
-        button.config(background='white', foreground='black',disabledforeground='black', state='disabled')
+        button.config(bg='white', fg='black',disabledforeground='black', state='disabled')
         self.values_couple_buttons.append(button)
         pygame.mixer.music.load("sounds/click-card.mp3")
         pygame.mixer.music.play(loops=0)
@@ -111,7 +112,6 @@ class Aplicacion:
             self.values_couple_buttons = []
             
             
-    
     def check_match_buttons(self, buttons):
         value_first_button = buttons[0].cget('text')
         value_second_button = buttons[1].cget('text')
@@ -135,6 +135,7 @@ class Aplicacion:
             if nuew_game:
                 self.new_game()
             else:
+                self.window.destroy()
                 messagebox.showinfo("Juego terminado", "Muchas gracias por jugar")
 
     
@@ -161,7 +162,7 @@ class Aplicacion:
         time_elapsed = int(time.time() - self.initial_time) 
         format_time = self.time_format(time_elapsed)  # Formatear el tiempo
         # Actualizo la etiqueta
-        self.time_label.config(text=f"{format_time}")  
+        self.time_label.config(text=f"{format_time} s")  
         
         if self.counter_match != 8:
             self.window.after(1000, self.update_timer)
@@ -173,6 +174,5 @@ class Aplicacion:
         return f"{minutes:02}:{seconds_remaining:02}"
 
     
-    
-    
+
 aplicacion = Aplicacion()
